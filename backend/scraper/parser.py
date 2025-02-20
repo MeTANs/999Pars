@@ -1,5 +1,6 @@
 import aiohttp 
 from aiohttp import ClientSession, ClientResponse
+from bs4 import BeautifulSoup
 
 class BaseScraper:
     
@@ -8,7 +9,7 @@ class BaseScraper:
         self.headers = headers
         self.query = query
 
-    async def get_request(self) -> ClientResponse:
+    async def fetch_html(self) -> ClientResponse:
         
         async with ClientSession() as session:
             async with session.get(self.url, 
@@ -16,8 +17,14 @@ class BaseScraper:
                                    json=self.query) as response:
                 return await response.text()
     
+    async def get_navbar(self):
+        html = await self.fetch_html(self.url)
+        soup = BeautifulSoup(html, "lxml")
+        
+        
+    
 
-class Car(BaseScraper):
+class CarScraper(BaseScraper):
     
    async def scrap_car(html):
        
